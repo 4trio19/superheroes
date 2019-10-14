@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-function App() {
+const SUPERHERO_API_URL = "https://cdn.rawgit.com/akabab/superhero-api/0.2.0/api/all.json";
+const App = () => {
+  const [loading, setLoading] = useState(true);
+  const [superHeroes, setSuperHeroes] = useState([]);
+  useEffect(() => {
+    fetch(SUPERHERO_API_URL)
+      .then(response => response.json())
+      .then(jsonResponse => {
+        setSuperHeroes(jsonResponse);
+        setLoading(false);
+      });
+  }, []);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {loading ? 'loading' : 
+        <>
+        <p>{superHeroes[0].name}</p>
+        <img src={superHeroes[0].images.lg} alt=""/>
+        </>
+    }
     </div>
   );
 }
